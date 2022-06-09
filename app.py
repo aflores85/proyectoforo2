@@ -22,13 +22,13 @@ class Foro(Base, ToJson):
     title = Column(String(180), nullable=False)
     content = Column(String(180), nullable=False)
   
-    
+      
 class Subject(Base, ToJson):
     __tablename__ = 'Subject'
-    idSubject = Column(Integer, primary_key=True)
-    titleSubject = Column(String(180), nullable=False)
-    contentSubject = Column(String(180), nullable=False)
-    Foro_idSubject = Column(Integer, ForeignKey('Foro.id'), nullable=False)
+    id = Column(Integer, primary_key=True)
+    title = Column(String(180), nullable=False)
+    content = Column(String(180), nullable=False)
+    Foro_id = Column(Integer, ForeignKey('Foro.id'), nullable=False)
     Foro = relationship('Foro', backref=backref('Subjects', uselist=True, cascade='delete,all'))
 
    
@@ -72,15 +72,15 @@ def new_foro():
 
 @app.route('/newsubject', methods=['POST'])
 def new_subject():
-    if not 'titleSubject' in request.form:
+    if not 'title' in request.form:
         return Response('Nombre no especificado' , status=400)
-    titleSubject = request.form['titleSubject']
-    contentSubject = request.form ['contentSubject']
-    Foro_idSubject = request.form ['ForoidSubject']
-    if titleSubject == '':
+    title = request.form['title']
+    content = request.form ['content']
+    Foro_id = request.form ['Foroid']
+    if title == '':
         return Response("{'Mesanje_Error':'titulo vacio'}", statur=400, mimetype='applicatio/json')
 
-    subjectnuevo = Foro(titleSubject=titleSubject, contentSubject=contentSubject, Foro_idSubject=Foro_idSubject)
+    subjectnuevo = Foro(title=title, contentSubject=content, Foro_id=Foro_id)
 
     s = session()
     s.add(subjectnuevo)
@@ -175,3 +175,4 @@ def update_foro():
     s.commit()
 
     return Response(Status=204)
+app.run()
